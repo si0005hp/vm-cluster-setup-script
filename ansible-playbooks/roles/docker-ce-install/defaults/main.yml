@@ -1,0 +1,15 @@
+---
+docker_state: present
+
+docker_cleanup_packages_Ubuntu:
+  - {package: "docker.io"}
+  - {package: "docker-engine"}
+  - {package: "containerd"}
+
+docker_prerequisite_packages_Ubuntu:
+  - {package: "apt-transport-https"}
+  - {package: "ca-certificates"}
+  - {package: "curl"}
+  - {package: "software-properties-common"}
+
+user_add_to_docker_group: "vagrant" # default

@@ -1,0 +1,3 @@
+---
+- name: Install tree cmd
+  apt: name=tree
