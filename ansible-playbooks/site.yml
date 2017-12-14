@@ -1,2 +1,2 @@
 ---
-- import_playbook: servers.yml
+- import_playbook: workers.yml
