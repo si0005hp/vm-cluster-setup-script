@@ -5,3 +5,4 @@
     - common
     - java-install
     - docker-ce-install
+    - kafka-install

@@ -1,0 +1,13 @@
+---
+- name: ensure kafka present
+  unarchive:
+    remote_src: yes
+    src: "{{ kafka_download_url }}"
+    dest: "{{ install_dir }}"
+
+- name: ensure symlink present
+  file:
+    src: "{{ install_dir }}/{{ kafka_name }}"
+    dest: "{{ install_dir }}/{{ symlink_name }}"
+    mode: 0755
+    state: link
