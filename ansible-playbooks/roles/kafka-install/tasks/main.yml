@@ -11,3 +11,19 @@
     dest: "{{ install_dir }}/{{ symlink_name }}"
     mode: 0755
     state: link
+
+- name: setting server.properties
+  lineinfile: >- 
+    state=present 
+    create=yes
+    dest='{{ install_dir }}/{{ symlink_name }}/config/server.properties' 
+    regexp='{{ item.regexp }}'
+    line='{{ item.line }}'
+  with_items:
+    - regexp: '^broker.id='
+      line: 'broker.id={{ kafka_broker_id }}'
+    - regexp: '^listeners='
+      line: 'listeners=PLAINTEXT://{{ my_ipv4_addr }}:9092'
+    - regexp: '^zookeeper.connect='
+      line: 'zookeeper.connect={{ master_ipv4_addr }}:2181'
+
