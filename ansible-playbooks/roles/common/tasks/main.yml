@@ -2,6 +2,9 @@
 - name: Install tree cmd
   apt: name=tree
 
+- name: Install unzip cmd
+  apt: name=unzip
+
 - name: Setting hosts
   lineinfile: >- 
     state=present 
