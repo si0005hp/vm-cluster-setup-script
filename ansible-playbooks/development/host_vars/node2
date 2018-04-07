@@ -4,3 +4,6 @@ master_ipv4_addr: 192.168.33.10
 
 #kafka
 kafka_broker_id: 2
+
+#zabbix
+zabbix_resolved_server_ip: 192.168.43.1

@@ -1,0 +1,33 @@
+---
+- name: install repository configuration package
+  get_url:
+    url="http://repo.zabbix.com/zabbix/3.2/ubuntu/pool/main/z/zabbix-release/zabbix-release_3.2-1+trusty_all.deb"
+    dest="/tmp/zabbix-release_3.2-1.deb"
+
+- name: apt install deb
+  apt: deb="/tmp/zabbix-release_3.2-1.deb"
+
+- name: apt install zabbix-agent
+  apt:
+    name: zabbix-agent
+    update_cache: yes
+
+- name: setting zabbix_agentd.conf
+  lineinfile: >-
+    state=present
+    create=yes
+    dest='/etc/zabbix/zabbix_agentd.conf'
+    regexp='{{ item.regexp }}'
+    line='{{ item.line }}'
+  with_items:
+    - regexp: '^Server='
+      line: 'Server={{ master_ipv4_addr }},{{ zabbix_resolved_server_ip }}'
+    - regexp: '^ServerActive='
+      line: 'ServerActive={{ master_ipv4_addr }},{{ zabbix_resolved_server_ip }}'
+    - regexp: '^ListenIP='
+      line: 'ListenIP={{ my_ipv4_addr }}'
+
+- name: restart zabbix-agent
+  service:
+    name: zabbix-agent
+    state: restarted
