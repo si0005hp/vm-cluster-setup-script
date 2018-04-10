@@ -6,3 +6,4 @@
     - java-install
     - docker-ce-install
     - kafka-install
+    - zabbix-agent-install
