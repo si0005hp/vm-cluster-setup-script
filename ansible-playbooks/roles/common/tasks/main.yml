@@ -13,9 +13,9 @@
     regexp='{{ item.regexp }}'
     line='{{ item.line }}'
   with_items:
-    - regexp: '^192.168.43.11'
-      line: '192.168.43.11 node1'
-    - regexp: '^192.168.43.12'
-      line: '192.168.43.12 node2'
+    - regexp: '^192.168.33.101'
+      line: '192.168.33.101 node1'
+    - regexp: '^192.168.33.102'
+      line: '192.168.33.102 node2'
     - regexp: '^192.168.33.10'
       line: '192.168.33.10 master'

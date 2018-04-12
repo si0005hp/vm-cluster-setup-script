@@ -1,5 +1,5 @@
 ---
-my_ipv4_addr: 192.168.43.11
+my_ipv4_addr: 192.168.33.101
 master_ipv4_addr: 192.168.33.10
 
 #kafka
