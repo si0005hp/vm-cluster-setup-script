@@ -11,3 +11,9 @@
     - oracle-java8-installer
     - ca-certificates
     - oracle-java8-set-default
+
+- name: Setting JAVA_HOME to .bashrc
+  lineinfile: >- 
+    state=present
+    dest="{{ ansible_home }}/.bashrc"
+    line="export JAVA_HOME=/usr/lib/jvm/java-8-oracle"
