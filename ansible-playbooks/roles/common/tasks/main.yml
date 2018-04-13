@@ -5,6 +5,10 @@
 - name: Install unzip cmd
   apt: name=unzip
 
+# For the xml module
+- name: Install python-lxml
+  apt: name=python-lxml state=latest update_cache=yes force=yes
+
 - name: Setting hosts
   lineinfile: >- 
     state=present 
