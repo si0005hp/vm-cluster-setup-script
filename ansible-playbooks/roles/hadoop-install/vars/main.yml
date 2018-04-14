@@ -1,0 +1,8 @@
+---
+hadoop_version: "2.7.3"
+
+install_dir: "/opt"
+hadoop_name: "hadoop-{{ hadoop_version }}"
+install_path: "{{ install_dir }}/{{ hadoop_name }}"
+hadoop_conf_dir: "{{ install_path }}/etc/hadoop"
+hadoop_download_url: https://archive.apache.org/dist/hadoop/core/{{ hadoop_name }}/{{ hadoop_name }}.tar.gz

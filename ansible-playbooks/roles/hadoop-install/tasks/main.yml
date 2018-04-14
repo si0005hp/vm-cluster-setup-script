@@ -1,0 +1,107 @@
+---
+- name: ensure hadoop present
+  unarchive:
+    remote_src: yes
+    src: "{{ hadoop_download_url }}"
+    dest: "{{ install_dir }}"
+
+- name: Set owner and group
+  file: dest={{ install_path }} owner={{ ansible_env.SUDO_USER }} group={{ ansible_env.SUDO_USER }} recurse=yes
+
+- name: Setting environment variables to .bashrc
+  lineinfile: >- 
+    state=present
+    dest="{{ ansible_home }}/.bashrc"
+    line={{ item }}
+  with_items:
+    - "# HADOOP SETTINGS"
+    - "export HADOOP_HOME=/opt/{{ hadoop_name }}"
+    - "export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop"
+    - "export PATH=$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH"
+
+- name: Reset existing xml settings
+  xml:
+    path: "{{ item.path }}"
+    xpath: /configuration/property
+    state: absent
+  with_items:
+    - path: "{{ hadoop_conf_dir }}/core-site.xml"
+    - path: "{{ hadoop_conf_dir }}/hdfs-site.xml"
+    - path: "{{ hadoop_conf_dir }}/yarn-site.xml"
+
+- name: Setting core-site.xml
+  xml:
+    path: "{{ hadoop_conf_dir }}/core-site.xml"
+    xpath: /configuration
+    add_children: 
+      - property:
+          _:
+            - name: "fs.defaultFS"
+            - value: "hdfs://{{ master_ipv4_addr }}:9000"
+      - property:
+          _:
+            - name: "hadoop.tmp.dir"
+            - value: "/tmp/hadoop-tmp"
+
+- name: Setting hdfs-site.xml
+  xml:
+    path: "{{ hadoop_conf_dir }}/hdfs-site.xml"
+    xpath: /configuration
+    add_children: 
+      - property:
+          _:
+            - name: "dfs.replication"
+            - value: "1"
+      - property:
+          _:
+            - name: "dfs.namenode.datanode.registration.ip-hostname-check"
+            - value: "false"
+
+- name: Pre setting mapred-site.xml
+  copy:
+    src: "{{ hadoop_conf_dir }}/mapred-site.xml.template"
+    dest: "{{ hadoop_conf_dir }}/mapred-site.xml"
+- name: Setting mapred-site.xml
+  xml:
+    path: "{{ hadoop_conf_dir }}/mapred-site.xml"
+    xpath: /configuration
+    add_children: 
+      - property:
+          _:
+            - name: "mapreduce.framework.name"
+            - value: "yarn"
+
+- name: Setting yarn-site.xml
+  xml:
+    path: "{{ hadoop_conf_dir }}/yarn-site.xml"
+    xpath: /configuration
+    add_children: 
+      - property:
+          _:
+            - name: "yarn.nodemanager.aux-services"
+            - value: "mapreduce_shuffle"
+      - property:
+          _:
+            - name: "yarn.resourcemanager.hostname"
+            - value: "master"
+      - property:
+          _:
+            - name: "yarn.nodemanager.pmem-check-enabled"
+            - value: "false"
+      - property:
+          _:
+            - name: "yarn.nodemanager.vmem-check-enabled"
+            - value: "false"
+
+- name: Setting hadoop-env.sh
+  lineinfile: >- 
+    state=present 
+    create=yes
+    dest="{{ hadoop_conf_dir }}/hadoop-env.sh"
+    regexp='{{ item.regexp }}'
+    line='{{ item.line }}'
+  with_items:
+    - regexp: "^export JAVA_HOME="
+      line: "export JAVA_HOME={{ lookup('env', 'JAVA_HOME') }}"
+    - regexp: "^export HADOOP_CONF_DIR="
+      line: "export HADOOP_CONF_DIR={{ hadoop_conf_dir }}"
