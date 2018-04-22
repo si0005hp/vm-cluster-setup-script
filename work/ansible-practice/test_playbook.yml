@@ -1,0 +1,63 @@
+---
+- hosts: test_servers
+  environment:
+    env1: "env_one"
+    env2: "env_two"
+  vars:
+    play_var1: "play_one"
+    play_var2: "play_two"
+    users:
+      - user1
+      - user2
+
+  tasks:
+  - name: Create dir
+    file:
+      path: /tmp/ansible_test
+      state: directory
+      owner: vagrant
+      mode: 0755
+
+  - name: Copy file
+    copy:
+      src: /etc/hosts
+      dest: /tmp/ansible_test/hosts
+      owner: vagrant
+      mode: 0755
+    notify: "Change"
+
+  - name: Register test
+    shell: echo "register_test"
+    register: result
+
+  - name: Register debug
+    debug: 
+      var: result
+
+  - name: Register write
+    shell: > 
+      touch "/tmp/ansible_test/register_result" && 
+      echo {{ result }} > "/tmp/ansible_test/register_result"
+
+  - name: Debug groups
+    debug:
+      var: groups['test_servers'][0]
+
+  - name: Copy template
+    template:
+      src: "template/test.properties.j2"
+      dest: "/tmp/ansible_test/test.properties"
+      owner: vagrant
+      mode: 0755
+
+  - name: Debug vars
+    shell: echo "{{ users | join(',') }}"
+
+  handlers:
+  - name: Save history
+    file:
+      path: /tmp/ansible_test/history
+      state: touch
+      owner: vagrant
+      mode: 0755
+    listen: "Change"

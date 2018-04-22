@@ -1,0 +1,8 @@
+---
+- hosts: self
+  roles:
+    - master
+
+# - hosts: test_servers
+#   roles:
+#     - nodes

@@ -1,0 +1,9 @@
+key1=val1
+# Server List
+{% for index in range(2) %}
+server.{{ index + 1 }}={{ groups['test_servers'][index] }}
+{% endfor %}
+
+{% if play_var1 == 'play_one' %}
+key2=val2
+{% endif %}

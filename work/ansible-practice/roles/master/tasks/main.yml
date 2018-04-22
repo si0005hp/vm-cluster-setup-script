@@ -1,0 +1,9 @@
+---
+- include_tasks: subtask.yml param={{ items }}
+  when:
+    - items[0].project == items[1]
+  with_nested:
+    - "{{ employees }}"
+    - "{{ projects | default([]) }}"
+  loop_control:
+    loop_var: items

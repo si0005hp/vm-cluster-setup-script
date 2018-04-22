@@ -1,0 +1,15 @@
+---
+employees:
+  - id: 1
+    name: foo
+    project: hr
+  - id: 2
+    name: bar
+    project: ac
+  - id: 3
+    name: baz
+    project: scm
+
+projects:
+    - hr
+    - ac
