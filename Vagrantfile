@@ -18,7 +18,7 @@ Vagrant.configure("2") do |config|
     node.vm.hostname = "node1"
     node.vm.network :private_network, ip: "192.168.33.101"
     node.vm.provider "virtualbox" do |vb|
-      vb.memory = "2048"
+      vb.memory = "1024"
     end
   end
 
@@ -27,7 +27,7 @@ Vagrant.configure("2") do |config|
     node.vm.hostname = "node2"
     node.vm.network :private_network, ip: "192.168.33.102"
     node.vm.provider "virtualbox" do |vb|
-      vb.memory = "2048"
+      vb.memory = "1024"
     end
   end
   # Disable automatic box update checking. If you disable this, then
