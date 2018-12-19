@@ -23,3 +23,6 @@
       line: '192.168.33.102 node2'
     - regexp: '^192.168.33.10'
       line: '192.168.33.10 master'
+
+- name: Install tshark cmd
+  apt: name=tshark
