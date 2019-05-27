@@ -1,0 +1,25 @@
+- ec2_vpc_subnet_facts:
+    <<: &assumed_role_vars
+      aws_access_key: "{{ assumed_role.sts_creds.access_key }}"
+      aws_secret_key: "{{ assumed_role.sts_creds.secret_key }}"
+      security_token: "{{ assumed_role.sts_creds.session_token }}"
+    filters:
+      subnet-id: subnet-12b7d265
+  register: target_subnet
+- debug:
+    var: target_subnet
+
+- ec2:
+    <<: *assumed_role_vars
+    key_name: "amazon-linux-1218"
+    instance_type: "t2.micro"
+    image: "ami-00a5245b4816c38e6"
+    wait: yes
+    vpc_subnet_id: "{{ target_subnet.subnets[0].id }}"
+    assign_public_ip: yes
+    instance_tags:
+      Name: "ec2-ansible-test"
+    count_tag:
+      Name: "ec2-ansible-test"
+    exact_count: 1
+    region: "ap-northeast-1"

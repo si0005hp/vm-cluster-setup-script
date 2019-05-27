@@ -1,0 +1,23 @@
+# - name: gather caller identity
+#   aws_caller_identity:
+#     aws_access_key: "{{ assumed_role.sts_creds.access_key }}"
+#     aws_secret_key: "{{ assumed_role.sts_creds.secret_key }}"
+#     security_token: "{{ assumed_role.sts_creds.session_token }}"
+#   register: caller_identity
+
+- ec2_vpc_subnet_facts:
+    <<: &assumed_role_vars
+      aws_access_key: "{{ assumed_role.sts_creds.access_key }}"
+      aws_secret_key: "{{ assumed_role.sts_creds.secret_key }}"
+      security_token: "{{ assumed_role.sts_creds.session_token }}"
+    filters:
+      subnet-id: subnet-12b7d265
+  register: target_subnet
+
+- debug:
+    var: assumed_role
+
+# - name: validate account
+#   fail:
+#     msg: "Invalid account {{caller_identity.Account}}"
+#   when: 999999999999|int != aws_account_id

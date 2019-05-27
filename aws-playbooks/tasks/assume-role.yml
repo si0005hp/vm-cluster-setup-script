@@ -1,0 +1,9 @@
+- name: "Assume Role"
+  sts_assume_role:
+    role_arn: "{{ role_arn }}"
+    role_session_name: "ansible-session"
+    region: "ap-northeast-1"
+  register: assumed_role
+  changed_when: False
+- debug:
+    var: assumed_role
