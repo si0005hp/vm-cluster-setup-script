@@ -1,0 +1,10 @@
+{
+  "name": "slack-notify-test",
+  "description": "DESCRIPTION",
+  "region": "ap-northeast-1",
+  "handler": "lambda_function.lambda_handler",
+  "role": "arn:aws:iam::xxxxxxxxxxx:role/dev-env-updown-role",
+  "timeout": 900,
+  "memory": 128,
+  "variables": {}
+}
